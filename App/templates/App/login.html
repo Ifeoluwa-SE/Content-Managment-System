@@ -1,0 +1,95 @@
+{% include 'navbar.html'%}
+{% block content %}
+<style>
+	.container {
+		background-color: lightblue;
+	}
+	.errors {
+		color: red;
+		font-size: 0.8em;
+		margin-top: 0.5em;
+	}
+	/* Mobile Styles */
+	@media (max-width: 576px) {
+		.inner-sec {
+			margin-top: 1em;
+		}
+		.login {
+			padding: 1em;
+		}
+		.login form {
+			margin: 0;
+		}
+	}
+	form input[type="text"], form input[type="password"] {
+		width: 100%;
+		max-width: 300px; /* Change this value to adjust the maximum width of the form fields */
+	}
+</style>
+
+
+{% if page == 'login' %}
+<section class="main-content-w3layouts-agileits">
+	<div class="container">
+		<h3 class="tittle">Sign In Now</h3>
+		<div class="row inner-sec">
+			<div class="login p-5 bg-light mx-auto mw-100">
+				<form method="post" action="">
+					{% csrf_token %}
+					<div class="form-group">
+						<label>Username:</label>
+						<input type="text" name="username" placeholder="Enter Username" />
+					</div>
+					<div class="form-group">
+						<label>Password:</label>
+						<input type="password" name="password" placeholder="Enter Password" />
+					</div>
+					<div class="form-check mb-2">
+						<input type="checkbox" class="form-check-input" id="exampleCheck1">
+						<label class="form-check-label" for="exampleCheck1">Check me out</label>
+					</div>
+					<button type="submit" class="btn btn-primary submit mb-4">Sign In</button>
+					<p><a href="{% url 'registerUser' %}"> Don't have an account?</a></p>
+				</form>
+			</div>
+		</div>
+	</div>
+</section>
+{% else %}
+<section class="main-content-w3layouts-agileits">
+	<div class="container">
+		<h3 class="tittle">Register your Account</h3>
+		<div class="row inner-sec">
+			<div class="col-md-6 login p-5 bg-light mx-auto mw-100">
+				<form method="post" action="">
+					{% csrf_token %}
+					<div class="form-group">
+						<label for="{{ form.username.id_for_label }}">Username:</label>
+						{{ form.username }}
+						<div class="errors">{{ form.username.errors }}</div>
+						<small id="{{ form.username.id_for_label }}Help" class="form-text text-muted">{{ form.username.help_text }}</small>
+					</div>
+					<div class="form-group">
+						<label for="{{ form.password1.id_for_label }}">Password:</label>
+						{{ form.password1 }}
+						<div class="errors">{{ form.password1.errors }}</div>
+						<small id="{{ form.password1.id_for_label }}Help" class="form-text text-muted">{{ form.password1.help_text }}</small>
+					</div>
+					<div class="form-group">
+						<label for="{{ form.password2.id_for_label }}">Confirm Password:</label>
+						{{ form.password2 }}
+						<div class="errors">{{ form.password2.errors }}</div>
+						<small id="{{ form.password2.id_for_label }}Help" class="form-text text-muted">{{ form.password2.help_text }}</small>
+					</div>
+					<input type="submit" class=""btn btn-primary submit mb-4" value="Register" /><br>
+					<p>Already registered? </p>
+            <a href="{% url 'loginUser' %}">Login</a>
+			    </form>
+			</div>
+            {% endif %}
+
+		</div>
+	</div>
+</section>
+	<!--//main-->
+{% endblock content %}

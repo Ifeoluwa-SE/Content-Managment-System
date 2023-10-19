@@ -1,0 +1,256 @@
+
+{% block content %}
+{% include 'navbar.html'%}
+
+
+{% if request.user == profile.user %}
+<h5>To make a successful Upload all fields are required</h5>
+
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+      <div class="article-form">
+        <form method="POST" action="" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ form.media }}
+          <div class="form-group">
+            <label for="{{form.topic.id_for_label}}">Topic</label>
+            {{ form.topic }}
+          </div>
+          <div class="form-group">
+            <label for="{{form.article.id_for_label}}" >Article</label>
+            {{ form.article }}
+          </div>
+          <div class="form-group">
+            <label for="{{form.image.id_for_label}}">Image</label>
+            {{ form.image }}
+          </div>
+          <input type="submit" value="Submit" class="btn btn-primary" />
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  h5{
+    text-align: center;
+    color:red;
+  }
+  .article-form {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  input[type="text"],
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    line-height: 1.5;
+    resize: none;
+  }
+
+  input[type="file"] {
+    margin-top: 5px;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    cursor: pointer;
+  }
+
+  .btn:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+  }
+
+  /* Responsive styles */
+  @media (max-width: 767px) {
+    .article-form {
+      margin: 10px;
+      padding: 10px;
+    }
+    input[type="text"],
+    textarea {
+      font-size: 14px;
+    }
+    .btn {
+      font-size: 14px;
+      padding: 8px 16px;
+    }
+  }
+</style>
+{% endif %}
+
+
+<!--
+<div> {% for post in post %}
+    <div class="col-md-6 blog-grid-top">
+        <div class="b-grid-top">
+            <div class="blog_info_center_grid">
+                <a href="{% url 'comments' users.id post.user.id post.id %}">
+        <img src="{{post.imageURL}}" class="img-fluid" alt="" />
+        
+    </div>
+    <h3>
+        {{post.user}} 
+    </h3>
+    <p>{{post.topic}}</p>
+</div>
+<ul class="blog-icons">
+    <li>
+        <a href="">
+            <i class="far fa-clock"></i>{{post.created|timesince}} ago </a>
+    </li>
+    <li class="mx-2">
+        <a href="{% url 'comments' users.id post.user.id post.id %}">
+            <i class="far fa-comment"></i> Comments </a>
+    </li>
+
+    
+</ul>
+</div>
+    
+    {% endfor %}
+</div>
+-->
+<style>
+    .post-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 15px;
+        margin: 0 -15px;
+    }
+    
+    .post-box {
+        width: calc(25% - 30px);
+        background-color: #fff;
+        margin: 0 15px 30px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.2s ease-out;
+    }
+    
+    .post-box:hover {
+        transform: scale(1.05);
+    }
+    
+    .post-box img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+    }
+    
+    .post-box h3 {
+        font-size: 24px;
+        margin: 20px 0 10px;
+    }
+    
+    .post-box p {
+        font-size: 16px;
+        margin: 0 0 20px;
+    }
+    
+    .post-box ul {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px 20px;
+        font-size: 14px;
+        color: #999;
+        border-top: 1px solid #eee;
+    }
+    
+    .post-box ul li {
+        list-style: none;
+    }
+    
+    .post-box ul li i {
+        margin-right: 5px;
+    }
+    
+    @media screen and (max-width: 1199px) {
+        .post-box {
+            width: calc(33.33% - 30px);
+            margin-bottom: 30px;
+        }
+    }
+    
+    @media screen and (max-width: 991px) {
+        .post-box {
+            width: calc(30% - 30px);
+            margin-bottom: 30px;
+        }
+    }
+    
+    @media screen and (max-width: 768px) {
+        .post-box {
+            width: calc(50% - 30px);
+            margin-bottom: 20px;
+        }
+    }
+</style>
+
+<div class="post-container">
+    {% for post in post %}
+        <div class="post-box">
+            <a href="{% url 'comments' users.id post.user.id post.id %}">
+                <img src="{{ post.imageURL }}" alt="" />
+            </a>
+            <div class="post-details">
+                <h3>{{ post.topic }}</h3>
+                <p>{{ post.user }}</p>
+				<ul class="blog-icons">
+					<li>
+						<a href="">
+							<i class="far fa-clock"></i>{{post.created|timesince}} ago </a>
+					</li>
+					<li class="mx-2">
+						<a href="{% url 'comments' users.id post.user.id post.id %}">
+							<i class="fas fa-comment"></i>{{post.reply_set.count}} </a>
+					</li>
+					{% if request.user == profile.user %}
+					<li class="mx-2">
+						<a href="{% url 'updatePost' users.id post.user.id post.id %}">
+							<i class="fas fa-edit"></i>{{post.reply_set.count}} </a>
+					</li>
+					<li class="mx-2">
+						<a href="{% url 'deletePost' users.id post.user.id  post.id %}">
+							<i class="fas fa-trash"> </i></a>
+					</li>
+					{% endif %}
+					
+				</ul>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+
+{% endblock %}

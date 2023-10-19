@@ -1,0 +1,140 @@
+{% block content %}
+{% include 'navbar.html'%}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Article Page</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<style>
+		.article-container {
+			display: flex;
+			flex-wrap: wrap;
+		}
+
+		.article-image {
+			flex-basis: 50%;
+			padding-right: 20px;
+			margin-bottom: 20px;
+		}
+
+		.article-image img {
+			width: 100%;
+			height: auto;
+		}
+
+		.article-content {
+			flex-basis: 50%;
+		}
+
+		.article-content h1 {
+			color: black;
+			font-size: 28px;
+		}
+
+		.article-content p {
+			font-size: 16px;
+			line-height: 1.5;
+		}
+
+		.reply-textarea {
+			display: block;
+			width: 100%;
+			padding: 10px;
+			border: 1px solid #ccc;
+			box-sizing: border-box;
+			resize: vertical;
+		  }
+
+		@media (max-width: 768px) {
+			.article-container {
+				flex-direction: column;
+			}
+
+			.article-image {
+				padding-right: 0;
+				margin-bottom: 10px;
+			}
+
+			.article-content {
+				flex-basis: 100%;
+			}
+
+			.article-content h1 {
+				font-size: 24px;
+			}
+			
+			.reply-textarea {
+				rows: 1;
+				cols: 20;
+			  }
+		}
+
+		@media (max-width: 900px) {
+			.article-container {
+				flex-wrap: wrap;
+			}
+
+			.article-image,
+			.article-content {
+				flex-basis: 100%;
+			}
+
+			.article-image {
+				padding-right: 0;
+			}
+		}
+
+		.reply-text {
+			padding: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12 col-md-6 article-image">
+				{% if post.image %}
+				<img src="{{ post.image.url }}" alt="{{ post.topic }}" class="img-responsive">
+				{% endif %}
+			</div>
+			<div class="col-sm-12 col-md-6 article-content">
+				<h1>{{ post.topic }}</h1><br>
+				<p>Updated on {{post.updated|date:"F j, Y"}}</p><br>
+				{% if post.article %}
+				<p>{{ post.article|safe }}</p>
+				{% endif %}
+				<hr>
+				<h2 style="font-size: 24px;">Comments</h2>
+				<br>
+				{% if request.user.is_authenticated %}
+				<div style="margin-top: 20px;">
+					<form method="POST" action="" enctype="multipart/form-data">
+						{% csrf_token %}
+						<label for="comment">Comment:</label><br>
+						<textarea id="comment" name="text" class="reply-textarea" rows="3" cols="35"></textarea><br>
+						<input type="submit" value="Submit">
+						<br><br>
+					</form>
+				</div>
+				{% endif %}
+				{% for reply in replies %}
+				<div>
+					<small>
+						<a href="{% url 'myProfile' reply.user.id %}">
+							<img src="{{reply.user.profile.imageURL}}" style="border-radius: 50%; height: 30px; width: 30px;">
+							{{reply.user.username}}
+							</a>
+							{{reply.created|timesince}} ago
+							</small>
+							<p class="reply-text">{{reply.text}}</p>
+				</div><hr>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+							
+</body>
+
+</html>
+{% endblock %}
